@@ -21,6 +21,10 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
   const [error, setError] = useState(null);
 
   const recognitionRef = useRef(null);
+  // finalTranscriptRef accumulates all finalized speech segments.
+  // This prevents duplication: in continuous mode, each onresult event only
+  // carries NEW results (from event.resultIndex), so we must keep a running total.
+  const finalTranscriptRef = useRef('');
   const latestTextRef = useRef('');
   const hadErrorRef = useRef(false);
   const manualStopRef = useRef(false); // true only when user presses Stop themselves
@@ -44,6 +48,7 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
   const start = useCallback(() => {
     if (!SpeechRecognition || recognitionRef.current) return;
 
+    finalTranscriptRef.current = '';
     latestTextRef.current = '';
     hadErrorRef.current = false;
     manualStopRef.current = false;
@@ -58,16 +63,35 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
     recognition.onstart = () => setStatus('listening');
 
     recognition.onresult = (event) => {
-      let text = '';
-      for (let i = 0; i < event.results.length; i += 1) {
-        text += event.results[i][0].transcript;
+      // Only process results that are NEW since the last event (event.resultIndex onwards).
+      // Without this, each event re-processes all previous results and causes double text.
+      let newFinal = '';
+      let interim = '';
+
+      for (let i = event.resultIndex; i < event.results.length; i += 1) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          newFinal += transcript;
+        } else {
+          interim += transcript;
+        }
       }
-      latestTextRef.current = text;
-      callbacksRef.current.onTranscript?.(text);
+
+      // Append newly finalized text to the running total
+      if (newFinal) {
+        finalTranscriptRef.current += (finalTranscriptRef.current ? ' ' : '') + newFinal.trim();
+      }
+
+      // Show finalized + current interim as one combined string
+      const fullText = finalTranscriptRef.current
+        + (interim ? (finalTranscriptRef.current ? ' ' : '') + interim : '');
+
+      latestTextRef.current = fullText;
+      callbacksRef.current.onTranscript?.(fullText);
     };
 
     recognition.onerror = (event) => {
-      // Ignore no-speech in continuous mode — user just paused mid-sentence
+      // Ignore no-speech in continuous mode — the user just paused mid-sentence
       if (event.error === 'no-speech') return;
       hadErrorRef.current = true;
       setStatus('error');

@@ -7,7 +7,7 @@ export const TRANSACTION_TYPES = ['credit', 'payment'];
 const MAX_AMOUNT = 10000000;
 const MAX_NAME_LENGTH = 60;
 const MAX_UNIT_LENGTH = 20;
-const MAX_TEXT_LENGTH = 500;
+const MAX_TEXT_LENGTH = 1000;
 const MAX_KNOWN_CUSTOMERS = 200;
 
 function toNumber(value) {
