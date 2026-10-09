@@ -21,13 +21,9 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
   const [error, setError] = useState(null);
 
   const recognitionRef = useRef(null);
-  // finalTranscriptRef accumulates all finalized speech segments.
-  // This prevents duplication: in continuous mode, each onresult event only
-  // carries NEW results (from event.resultIndex), so we must keep a running total.
-  const finalTranscriptRef = useRef('');
   const latestTextRef = useRef('');
   const hadErrorRef = useRef(false);
-  const manualStopRef = useRef(false); // true only when user presses Stop themselves
+  const manualStopRef = useRef(false); // true only when user taps Stop deliberately
   const callbacksRef = useRef({ onTranscript, onFinal });
 
   useEffect(() => {
@@ -48,7 +44,6 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
   const start = useCallback(() => {
     if (!SpeechRecognition || recognitionRef.current) return;
 
-    finalTranscriptRef.current = '';
     latestTextRef.current = '';
     hadErrorRef.current = false;
     manualStopRef.current = false;
@@ -63,29 +58,23 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
     recognition.onstart = () => setStatus('listening');
 
     recognition.onresult = (event) => {
-      // Only process results that are NEW since the last event (event.resultIndex onwards).
-      // Without this, each event re-processes all previous results and causes double text.
-      let newFinal = '';
-      let interim = '';
+      // Always iterate ALL results from index 0.
+      // The browser keeps a stable list — final results never change or duplicate.
+      // Separating isFinal from interim and concatenating gives the correct full text
+      // every time, without any separate accumulator ref that could cause doubling.
+      let finalText = '';
+      let interimText = '';
 
-      for (let i = event.resultIndex; i < event.results.length; i += 1) {
+      for (let i = 0; i < event.results.length; i += 1) {
         const transcript = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
-          newFinal += transcript;
+          finalText += transcript;
         } else {
-          interim += transcript;
+          interimText += transcript;
         }
       }
 
-      // Append newly finalized text to the running total
-      if (newFinal) {
-        finalTranscriptRef.current += (finalTranscriptRef.current ? ' ' : '') + newFinal.trim();
-      }
-
-      // Show finalized + current interim as one combined string
-      const fullText = finalTranscriptRef.current
-        + (interim ? (finalTranscriptRef.current ? ' ' : '') + interim : '');
-
+      const fullText = (finalText + (interimText ? ' ' + interimText : '')).trim();
       latestTextRef.current = fullText;
       callbacksRef.current.onTranscript?.(fullText);
     };
