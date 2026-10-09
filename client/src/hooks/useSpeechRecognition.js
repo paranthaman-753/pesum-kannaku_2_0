@@ -23,9 +23,16 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
   const recognitionRef = useRef(null);
   const latestTextRef = useRef('');
   const hadErrorRef = useRef(false);
-  const manualStopRef = useRef(false); // true only when user taps Stop deliberately
-  const callbacksRef = useRef({ onTranscript, onFinal });
+  const manualStopRef = useRef(false);
 
+  // --- Duplication-proof transcript tracking ---
+  // finalTextRef holds all text that has been confirmed final.
+  // lastFinalIndexRef tracks which result indices we have already added,
+  // so we never double-count them even if the browser re-fires old results.
+  const finalTextRef = useRef('');
+  const lastFinalIndexRef = useRef(-1);
+
+  const callbacksRef = useRef({ onTranscript, onFinal });
   useEffect(() => {
     callbacksRef.current = { onTranscript, onFinal };
   });
@@ -44,7 +51,10 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
   const start = useCallback(() => {
     if (!SpeechRecognition || recognitionRef.current) return;
 
+    // Reset all state for a fresh recording session
     latestTextRef.current = '';
+    finalTextRef.current = '';
+    lastFinalIndexRef.current = -1;
     hadErrorRef.current = false;
     manualStopRef.current = false;
     setError(null);
@@ -58,23 +68,37 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
     recognition.onstart = () => setStatus('listening');
 
     recognition.onresult = (event) => {
-      // Always iterate ALL results from index 0.
-      // The browser keeps a stable list — final results never change or duplicate.
-      // Separating isFinal from interim and concatenating gives the correct full text
-      // every time, without any separate accumulator ref that could cause doubling.
-      let finalText = '';
-      let interimText = '';
-
-      for (let i = 0; i < event.results.length; i += 1) {
-        const transcript = event.results[i][0].transcript;
+      // Step 1: Append only NEWLY finalized segments (those past lastFinalIndexRef).
+      // This prevents double-counting when browsers re-fire events for old results.
+      for (let i = lastFinalIndexRef.current + 1; i < event.results.length; i += 1) {
         if (event.results[i].isFinal) {
-          finalText += transcript;
-        } else {
-          interimText += transcript;
+          const word = event.results[i][0].transcript.trim();
+          if (word) {
+            finalTextRef.current = finalTextRef.current
+              ? finalTextRef.current + ' ' + word
+              : word;
+          }
+          lastFinalIndexRef.current = i;
         }
       }
 
-      const fullText = (finalText + (interimText ? ' ' + interimText : '')).trim();
+      // Step 2: Get only the LAST result as the interim display.
+      // On Android Chrome the interim result contains the full session text,
+      // NOT just the new word — so we must not concatenate it with finalTextRef.
+      // Instead: if the interim already starts with our finalText, strip that prefix.
+      const lastResult = event.results[event.results.length - 1];
+      let interimText = '';
+      if (lastResult && !lastResult.isFinal) {
+        const raw = lastResult[0].transcript.trim();
+        // Strip overlap: some browsers include finalized text inside the interim
+        if (finalTextRef.current && raw.startsWith(finalTextRef.current)) {
+          interimText = raw.slice(finalTextRef.current.length).trim();
+        } else {
+          interimText = raw;
+        }
+      }
+
+      const fullText = (finalTextRef.current + (interimText ? ' ' + interimText : '')).trim();
       latestTextRef.current = fullText;
       callbacksRef.current.onTranscript?.(fullText);
     };
