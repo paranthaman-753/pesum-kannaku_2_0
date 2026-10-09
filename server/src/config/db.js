@@ -7,7 +7,8 @@ const RETRY_DELAY_MS = 5000;
 const SERVER_SELECTION_TIMEOUT_MS = 5000;
 
 export function isDbReady() {
-  return mongoose.connection.readyState === 1;
+  // readyState 1 is connected, 2 is connecting. Mongoose buffers requests while connecting.
+  return mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2;
 }
 
 // Older versions of this project stored customers without "nameKey" and had a different unique index.
