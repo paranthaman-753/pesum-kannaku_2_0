@@ -1,0 +1,186 @@
+/* Pesum Kanakku — plain white, near-black ink, hairline rules.
+   Built for a phone held in one hand: big targets, readable Tamil. */
+
+:root {
+  --paper: #ffffff;
+  --ink: #171717;
+  --muted: #6b6b6b;
+  --rule: #e4e4e4;
+  --wash: #f7f7f7;
+  --owed: #a4361f;
+  --good: #1f6f3d;
+  --good-bg: #f1f8f3;
+  --good-rule: #cde5d4;
+  --bad: #b42318;
+  --bad-bg: #fdf3f2;
+  --bad-rule: #f0c9c5;
+  --info-bg: #f7f7f7;
+  --radius: 8px;
+  --target: 56px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Tamil", "Nirmala UI", "Latha", "Mukta Malar", sans-serif;
+  font-size: 17px;
+  line-height: 1.6; /* Tamil script needs generous line height */
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ---------- layout ---------- */
+.app { max-width: 480px; margin: 0 auto; min-height: 100vh; }
+.page { padding: 20px 20px 48px; }
+
+.header { padding: 14px 20px; border-bottom: 1px solid var(--rule); }
+.wordmark {
+  display: flex; align-items: baseline; gap: 10px;
+  background: none; border: 0; text-align: left;
+}
+.wordmark-tamil { font-size: 1.3rem; font-weight: 700; }
+.wordmark-latin { font-size: 0.85rem; color: var(--muted); }
+
+.page-header { margin-bottom: 20px; }
+.back-link {
+  background: none; border: 0; color: var(--muted);
+  min-height: 44px; padding: 0; font-size: 0.95rem;
+}
+.page-title { font-size: 1.6rem; line-height: 1.3; font-weight: 700; }
+
+.section { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--rule); }
+.section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+.section .btn { margin-top: 16px; }
+.section-spaced { margin-top: 32px; margin-bottom: 8px; }
+
+.muted { color: var(--muted); }
+.small { font-size: 0.85rem; }
+.center { text-align: center; padding: 24px 0; }
+
+/* ---------- home ---------- */
+.welcome { padding: 28px 0 8px; }
+.welcome-title { font-size: 1.7rem; line-height: 1.4; font-weight: 700; margin: 4px 0 28px; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; min-height: var(--target); padding: 12px 18px;
+  border-radius: var(--radius); border: 1px solid var(--ink);
+  font-size: 1.05rem; font-weight: 600;
+}
+.btn-primary { background: var(--ink); color: #fff; }
+.btn-secondary { background: var(--paper); color: var(--ink); border-color: #c9c9c9; }
+.btn-large { min-height: 68px; font-size: 1.25rem; }
+.btn-spaced { margin-top: 12px; margin-bottom: 8px; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.button-row { display: flex; gap: 12px; margin-top: 20px; }
+.button-row .btn { flex: 1; }
+
+/* ---------- forms ---------- */
+.field { margin-bottom: 20px; flex: 1; }
+.field-row { display: flex; gap: 12px; }
+.field label, .field-label {
+  display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px;
+}
+.input, .textarea {
+  width: 100%; min-height: 52px; padding: 12px 14px;
+  background: var(--paper); border: 1px solid #c9c9c9; border-radius: var(--radius);
+  font-size: 1.05rem;
+}
+.textarea { min-height: 96px; resize: vertical; }
+.field-error { margin-top: 6px; font-size: 0.875rem; color: var(--bad); }
+
+.segmented { display: flex; border: 1px solid #c9c9c9; border-radius: var(--radius); overflow: hidden; }
+.segmented button {
+  flex: 1; min-height: var(--target); background: var(--paper); border: 0;
+  font-weight: 600; font-size: 1rem;
+}
+.segmented button + button { border-left: 1px solid #c9c9c9; }
+.segmented button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+
+/* ---------- speech ---------- */
+.mic-area { text-align: center; padding: 8px 0 4px; }
+.mic-button {
+  width: 96px; height: 96px; border-radius: 50%;
+  border: 2px solid var(--ink); background: var(--paper);
+  font-size: 2.2rem; line-height: 1;
+}
+.mic-button.is-listening {
+  background: var(--ink);
+  box-shadow: 0 0 0 8px rgba(23, 23, 23, 0.12);
+}
+.mic-button:disabled { opacity: 0.4; cursor: not-allowed; }
+.mic-hint { margin-top: 10px; color: var(--muted); font-size: 0.9rem; }
+
+.status-line { text-align: center; font-size: 0.9rem; margin: 6px 0 18px; font-weight: 600; }
+.status-label { color: var(--muted); font-weight: 400; margin-right: 4px; }
+
+/* ---------- notices ---------- */
+.notice {
+  padding: 12px 14px; border-radius: var(--radius); margin-bottom: 16px;
+  border: 1px solid var(--rule); background: var(--info-bg);
+}
+.notice-title { font-weight: 600; }
+.notice-hint { font-size: 0.92rem; margin-top: 2px; }
+.notice-error { background: var(--bad-bg); border-color: var(--bad-rule); color: var(--bad); }
+.notice-success { background: var(--good-bg); border-color: var(--good-rule); color: var(--good); font-size: 1.1rem; }
+
+/* ---------- confirm slip ---------- */
+.slip { border: 1px solid var(--ink); border-radius: var(--radius); padding: 8px 18px; margin-bottom: 16px; }
+.detail-row { padding: 12px 0; border-bottom: 1px solid var(--rule); }
+.detail-row:last-child { border-bottom: 0; }
+.detail-row dt { font-size: 0.85rem; color: var(--muted); }
+.detail-row dd { display: flex; flex-direction: column; }
+.slip-value { font-size: 1.25rem; font-weight: 600; }
+.slip-amount { font-size: 1.9rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.4; }
+.slip-note { font-size: 0.85rem; color: var(--muted); }
+div.slip { padding-top: 16px; padding-bottom: 16px; }
+div.slip > p + p { margin-top: 4px; }
+.original-text { font-size: 0.9rem; }
+
+.type-label { font-weight: 600; font-size: 1rem; }
+.type-credit { color: var(--owed); }
+.type-payment { color: var(--good); }
+div.slip .type-label { font-size: 0.95rem; margin-left: 6px; }
+
+/* ---------- customers ---------- */
+.card {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; text-align: left; background: var(--paper);
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  padding: 16px; margin-bottom: 12px; min-height: var(--target);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.customer-name { font-size: 1.15rem; font-weight: 600; }
+.customer-balance { display: flex; flex-direction: column; align-items: flex-end; }
+.amount { font-weight: 700; font-variant-numeric: tabular-nums; }
+.amount-owed { color: var(--owed); }
+.amount-good { color: var(--good); }
+.add-customer { margin-bottom: 20px; }
+
+.balance { text-align: left; padding: 8px 0 20px; }
+.balance-amount { font-size: 2.6rem; font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums; }
+
+/* ---------- ledger rows ---------- */
+.ledger { list-style: none; border-top: 1px solid var(--ink); }
+.ledger-row {
+  display: flex; justify-content: space-between; gap: 16px;
+  padding: 14px 0; border-bottom: 1px solid var(--rule);
+}
+.ledger-item { font-weight: 600; }
+.ledger-amount { text-align: right; }
+.ledger-amount .amount { font-size: 1.1rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .mic-button.is-listening { animation: breathe 1.6s ease-in-out infinite; }
+  @keyframes breathe { 50% { box-shadow: 0 0 0 14px rgba(23, 23, 23, 0.06); } }
+}

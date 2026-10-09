@@ -1,0 +1,21 @@
+{
+  "name": "pesum-kanakku",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tamil voice-first credit ledger MVP",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "setup": "npm install && npm install --prefix server && npm install --prefix client",
+    "dev": "concurrently -n server,client -c gray,gray \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "start:server": "npm start --prefix server",
+    "start:client": "npm run dev --prefix client",
+    "seed": "npm run seed --prefix server",
+    "seed:reset": "npm run seed:reset --prefix server",
+    "test": "npm test --prefix server",
+    "eval:ai": "npm run eval:ai --prefix server",
+    "build": "npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

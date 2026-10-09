@@ -1,0 +1,434 @@
+[
+  {
+    "id": 1,
+    "category": "tamil_credit",
+    "input": "முருகன் கிட்ட ரெண்டு கிலோ அரிசி 120 ரூபாய்க்கு கடனா கொடுத்தேன்.",
+    "expected": {
+      "intent": "credit",
+      "customer": "முருகன்",
+      "item": "அரிசி",
+      "quantity": 2,
+      "unit": "kg",
+      "amount": 120
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 2,
+    "category": "payment",
+    "input": "Murugan 200 ரூபாய் கொடுத்துட்டாரு",
+    "expected": {
+      "intent": "payment",
+      "customer": "Murugan",
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": 200
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 3,
+    "category": "tanglish_credit",
+    "input": "Ravi ku oru litre oil 180 rupees kadan",
+    "expected": {
+      "intent": "credit",
+      "customer": "Ravi",
+      "item": "oil",
+      "quantity": 1,
+      "unit": "L",
+      "amount": 180
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 4,
+    "category": "payment",
+    "input": "செல்வி 100 ரூபாய் பணம் கொடுத்தார்",
+    "expected": {
+      "intent": "payment",
+      "customer": "செல்வி",
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": 100
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 5,
+    "category": "tanglish_credit",
+    "input": "Kumar ku 5 kg sugar 220 rupees kadanuku kuduthen",
+    "expected": {
+      "intent": "credit",
+      "customer": "Kumar",
+      "item": "sugar",
+      "quantity": 5,
+      "unit": "kg",
+      "amount": 220
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 6,
+    "category": "tamil_credit",
+    "input": "மீனாவுக்கு 300 ரூபாய்க்கு சோப்பு கடனா கொடுத்தேன்",
+    "expected": {
+      "intent": "credit",
+      "customer": "மீனா",
+      "item": "சோப்பு",
+      "quantity": null,
+      "unit": null,
+      "amount": 300
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 7,
+    "category": "payment",
+    "input": "Ravi paid 150 rupees",
+    "expected": {
+      "intent": "payment",
+      "customer": "Ravi",
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": 150
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 8,
+    "category": "missing_amount",
+    "input": "முருகன் கிட்ட அஞ்சு கிலோ பருப்பு கடனா கொடுத்தேன்",
+    "expected": {
+      "intent": "credit",
+      "customer": "முருகன்",
+      "item": "பருப்பு",
+      "quantity": 5,
+      "unit": "kg",
+      "amount": null
+    },
+    "expectedMissing": [
+      "amount"
+    ]
+  },
+  {
+    "id": 9,
+    "category": "payment",
+    "input": "Murugan 50 rupees thanthutaru",
+    "expected": {
+      "intent": "payment",
+      "customer": "Murugan",
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": 50
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 10,
+    "category": "number_words",
+    "input": "ரெண்டு பாக்கெட் பால் அறுபது ரூபாய்க்கு முருகன் கடன்",
+    "expected": {
+      "intent": "credit",
+      "customer": "முருகன்",
+      "item": "பால்",
+      "quantity": 2,
+      "unit": "packet",
+      "amount": 60
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 11,
+    "category": "payment",
+    "input": "Kumar paid 500 rupees cash",
+    "expected": {
+      "intent": "payment",
+      "customer": "Kumar",
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": 500
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 12,
+    "category": "numeric_amount",
+    "input": "Selvi 1 kg tea powder 450 rupees credit",
+    "expected": {
+      "intent": "credit",
+      "customer": "Selvi",
+      "item": "tea powder",
+      "quantity": 1,
+      "unit": "kg",
+      "amount": 450
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 13,
+    "category": "unknown_customer",
+    "input": "200 ரூபாய் கடனா அரிசி கொடுத்தேன்",
+    "expected": {
+      "intent": "credit",
+      "customer": null,
+      "item": "அரிசி",
+      "quantity": null,
+      "unit": null,
+      "amount": 200
+    },
+    "expectedMissing": [
+      "customer"
+    ]
+  },
+  {
+    "id": 14,
+    "category": "number_words",
+    "input": "ரவி ஆயிரம் ரூபாய் கொடுத்துட்டாரு",
+    "expected": {
+      "intent": "payment",
+      "customer": "ரவி",
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": 1000
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 15,
+    "category": "unknown_customer",
+    "input": "Paid 300 rupees",
+    "expected": {
+      "intent": "payment",
+      "customer": null,
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": 300
+    },
+    "expectedMissing": [
+      "customer"
+    ]
+  },
+  {
+    "id": 16,
+    "category": "unclear",
+    "input": "இன்னைக்கு மழை பெய்யுது",
+    "expected": {
+      "intent": "unknown",
+      "customer": null,
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": null
+    },
+    "expectedMissing": [
+      "intent",
+      "customer",
+      "amount"
+    ]
+  },
+  {
+    "id": 17,
+    "category": "tanglish_credit",
+    "input": "Meena ku rendu litre oil 340 rupees kadan",
+    "expected": {
+      "intent": "credit",
+      "customer": "Meena",
+      "item": "oil",
+      "quantity": 2,
+      "unit": "L",
+      "amount": 340
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 18,
+    "category": "number_words",
+    "input": "செல்வி முன்னூறு ரூபாய் கொடுத்தாங்க",
+    "expected": {
+      "intent": "payment",
+      "customer": "செல்வி",
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": 300
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 19,
+    "category": "tanglish_credit",
+    "input": "Murugan ku 1 packet biscuit 20 rupees kadan",
+    "expected": {
+      "intent": "credit",
+      "customer": "Murugan",
+      "item": "biscuit",
+      "quantity": 1,
+      "unit": "packet",
+      "amount": 20
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 20,
+    "category": "numeric_amount",
+    "input": "Kumar 400 rupees kadan",
+    "expected": {
+      "intent": "credit",
+      "customer": "Kumar",
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": 400
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 21,
+    "category": "number_words",
+    "input": "முருகன் கிட்ட ஒன்றரை கிலோ சர்க்கரை 75 ரூபாய்க்கு கடனா கொடுத்தேன்",
+    "expected": {
+      "intent": "credit",
+      "customer": "முருகன்",
+      "item": "சர்க்கரை",
+      "quantity": 1.5,
+      "unit": "kg",
+      "amount": 75
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 22,
+    "category": "number_words",
+    "input": "Ravi ku moonu kilo thakkali nooru rupees kadan",
+    "expected": {
+      "intent": "credit",
+      "customer": "Ravi",
+      "item": "thakkali",
+      "quantity": 3,
+      "unit": "kg",
+      "amount": 100
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 23,
+    "category": "numeric_amount",
+    "input": "Meena 250 gram tea powder 85.50 rupees kadan",
+    "expected": {
+      "intent": "credit",
+      "customer": "Meena",
+      "item": "tea powder",
+      "quantity": 250,
+      "unit": "g",
+      "amount": 85.5
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 24,
+    "category": "missing_amount",
+    "input": "Selvi paid today",
+    "expected": {
+      "intent": "payment",
+      "customer": "Selvi",
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": null
+    },
+    "expectedMissing": [
+      "amount"
+    ]
+  },
+  {
+    "id": 25,
+    "category": "tamil_credit",
+    "input": "ஒரு டஜன் முட்டை 84 ரூபாய் குமார் கடன்",
+    "expected": {
+      "intent": "credit",
+      "customer": "குமார்",
+      "item": "முட்டை",
+      "quantity": 1,
+      "unit": "dozen",
+      "amount": 84
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 26,
+    "category": "balance_word",
+    "input": "முருகன் கிட்ட ரெண்டு கிலோ அரிசி ₹120 பாக்கி.",
+    "expected": {
+      "intent": "credit",
+      "customer": "முருகன்",
+      "item": "அரிசி",
+      "quantity": 2,
+      "unit": "kg",
+      "amount": 120
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 27,
+    "category": "dal_item",
+    "input": "ரவி துவரம் பருப்பு ஒரு கிலோ 160 ரூபாய் கடன்",
+    "expected": {
+      "intent": "credit",
+      "customer": "ரவி",
+      "item": "துவரம் பருப்பு",
+      "quantity": 1,
+      "unit": "kg",
+      "amount": 160
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 28,
+    "category": "payment",
+    "input": "குமார் 500 ரூபாய் கட்டிட்டாரு",
+    "expected": {
+      "intent": "payment",
+      "customer": "குமார்",
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": 500
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 29,
+    "category": "dal_item",
+    "input": "செல்வி கிட்ட உளுந்து அரை கிலோ 70 ரூபாய் பாக்கி",
+    "expected": {
+      "intent": "credit",
+      "customer": "செல்வி",
+      "item": "உளுந்து",
+      "quantity": 0.5,
+      "unit": "kg",
+      "amount": 70
+    },
+    "expectedMissing": []
+  },
+  {
+    "id": 30,
+    "category": "payment",
+    "input": "மீனா 250 ரூபாய் பணம் கொடுத்துட்டாங்க",
+    "expected": {
+      "intent": "payment",
+      "customer": "மீனா",
+      "item": null,
+      "quantity": null,
+      "unit": null,
+      "amount": 250
+    },
+    "expectedMissing": []
+  }
+]
