@@ -13,7 +13,7 @@ const ERROR_MESSAGES = {
 
 // Wraps the browser speech API.
 //   onTranscript(text) - called while the person is speaking (live text)
-//   onFinal(text)      - called once when listening ends with some text
+//   onFinal(text)      - called once when the user manually taps Stop
 // status is "ready" | "listening" | "error"
 export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } = {}) {
   const isSupported = Boolean(SpeechRecognition);
@@ -23,6 +23,7 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
   const recognitionRef = useRef(null);
   const latestTextRef = useRef('');
   const hadErrorRef = useRef(false);
+  const manualStopRef = useRef(false); // true only when user presses Stop themselves
   const callbacksRef = useRef({ onTranscript, onFinal });
 
   useEffect(() => {
@@ -45,11 +46,12 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
 
     latestTextRef.current = '';
     hadErrorRef.current = false;
+    manualStopRef.current = false;
     setError(null);
 
     const recognition = new SpeechRecognition();
     recognition.lang = lang;
-    recognition.continuous = false;
+    recognition.continuous = true;   // Keep mic open until user taps Stop
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
@@ -65,6 +67,8 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
     };
 
     recognition.onerror = (event) => {
+      // Ignore no-speech in continuous mode — user just paused mid-sentence
+      if (event.error === 'no-speech') return;
       hadErrorRef.current = true;
       setStatus('error');
       setError(ERROR_MESSAGES[event.error] || MESSAGES.speechFailed);
@@ -73,8 +77,11 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
     recognition.onend = () => {
       recognitionRef.current = null;
       setStatus((current) => (current === 'error' ? 'error' : 'ready'));
-      const text = latestTextRef.current.trim();
-      if (!hadErrorRef.current && text) callbacksRef.current.onFinal?.(text);
+      // Only call onFinal when the user deliberately tapped Stop
+      if (manualStopRef.current) {
+        const text = latestTextRef.current.trim();
+        if (!hadErrorRef.current && text) callbacksRef.current.onFinal?.(text);
+      }
     };
 
     recognitionRef.current = recognition;
@@ -88,7 +95,10 @@ export function useSpeechRecognition({ lang = 'ta-IN', onTranscript, onFinal } =
   }, [lang]);
 
   const stop = useCallback(() => {
-    recognitionRef.current?.stop();
+    if (recognitionRef.current) {
+      manualStopRef.current = true; // Signal that this was a deliberate stop
+      recognitionRef.current.stop();
+    }
   }, []);
 
   return { isSupported, status, error, start, stop };
